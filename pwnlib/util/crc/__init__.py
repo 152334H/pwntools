@@ -67,6 +67,10 @@ class BitPolynom(object):
         Traceback (most recent call last):
             ...
         ValueError: Not a valid polynomial: y
+        >>> 0 // (0b10 & 0b111*BitPolynom(0) >> 2)
+        Traceback (most recent call last):
+            ...
+        ZeroDivisionError
     """
 
 
@@ -182,18 +186,16 @@ class BitPolynom(object):
     def __lshift__(self, other):
         return BitPolynom(int(self) << int(other))
 
-    def __rlshift__(self, other):
-        return BitPolynom(int(other) << int(self))
-
     def __rshift__(self, other):
         return BitPolynom(int(self) >> int(other))
 
-    def __rrshift__(self, other):
-        return BitPolynom(int(other) >> int(self))
-
     def __pow__(self, other):
-        r = BitPolynom(1)
-        for _ in range(other):
+        if other:
+            r = self**(other>>1)
+        else:
+            r = BitPolynom(1)
+        r *= r
+        if other&1:
             r *= self
         return r
 
