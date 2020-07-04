@@ -4,6 +4,7 @@ from __future__ import division
 import ctypes
 import functools
 import string
+import six
 
 from six.moves import range
 
